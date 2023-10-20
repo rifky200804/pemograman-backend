@@ -17,7 +17,7 @@ class Animal
   {
     # gunakan foreach untuk menampilkan data animals (array)
     foreach ($this->data as $key => $value) {
-      echo $value;
+      echo $value . "<br>";
     }
   }
 
