@@ -128,7 +128,7 @@ class StudentController extends Controller
         $student = Student::destroy($id);
 
         $data = [
-            'message' => "Student is deleted successfully",
+            'message' => "deleted Student issss successfully",
             'data' => $student
         ];
 
