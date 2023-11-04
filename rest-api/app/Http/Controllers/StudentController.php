@@ -14,17 +14,23 @@ class StudentController extends Controller
     public function index()
     {
         try {
-            $student = Student::all();
+            $students = Student::all();
     
-            $data = [
-                "message" => "Get All Users",
-                "data" => $student
-            ];
+            if (count($students) > 0) {
+                $result = [
+                    "message" => "Get All Users",
+                    "data" => $students
+                ];
+            }else{
+                $result = [
+                    'message' => "data not found"
+                ];
+            }
     
-            return response()->json($data,200);
+            return response()->json($result,200);
             
         } catch (\Throwable $th) {
-           return response()->json(["message"=>"error","error"=>$th]);
+           return response()->json(["message"=>"error","error"=>$th],500);
         }
         
     }
@@ -62,9 +68,9 @@ class StudentController extends Controller
                 'data' => $students
             ];
     
-            return response()->json($data,201);
+            return response()->json($data,2001);
         } catch (\Throwable $th) {
-            return response()->json(["message"=>"error"]);
+            return response()->json(["message"=>"error",'error'=>$th],500);
         }
     }
 
@@ -74,9 +80,26 @@ class StudentController extends Controller
      * @param  \App\Models\Student  $student
      * @return \Illuminate\Http\Response
      */
-    public function show(Student $student)
+    public function show( $id)
     {
-        //
+        try {
+            $data = Student::find($id);
+            if ($data) {
+                $result = [
+                    'message' => "success get data",
+                    'data' => $data
+                ];
+            }else{
+                $result = [
+                    'message' => 'failed to get data',
+                    'data' => 'data not found'
+                ];
+            }
+            return response()->json($result,200);
+        } catch (\Throwable $th) {
+            return response()->json(["message"=>"error","error"=>$th],500);
+        }
+
     }
 
     /**
@@ -99,21 +122,31 @@ class StudentController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $id = (int) $id;
-        $input = [
-            'nama' => $request->nama,
-            'nim' => $request->nim,
-            'email' => $request->email,
-            'jurusan' => $request->jurusan
-        ];
-        $student = Student::find($id)->update($input);
-
-        $data = [
-            'message' => "Student is updated successfully",
-            'data' => $student
-        ];
-
-        return response()->json($data,200);
+        try {
+            $id = (int) $id;
+            $student = Student::find($id);
+            $input = [
+                'nama' => $request->nama ?? $student->nama,
+                'nim' => $request->nim ?? $student->nim,
+                'email' => $request->email ?? $student->email,
+                'jurusan' => $request->jurusan ?? $student->jurusan
+            ];
+            if ($student) {  
+                $student->update($input);
+                $result = [
+                    'message' => "Student is updated successfully",
+                    'data' => $student
+                ];
+            }else{
+                $result = [
+                    'message' => 'failed to updated student',
+                    'data' => 'data not found'
+                ];
+            }
+            return response()->json($result,200);
+        } catch (\Throwable $th) {
+            return response()->json(["message"=>"error","error"=>$th],500);
+        }
     }
 
     /**
@@ -124,14 +157,28 @@ class StudentController extends Controller
      */
     public function destroy($id)
     {
-        $id = (int) $id;
-        $student = Student::destroy($id);
+        try {
+            $id = (int) $id;
+            $student = Student::find($id);
+            if ($student) {
+                $student->delete();
+                $result = [
+                    'message' => "error",
+                    'data' => "student is not found"
+                ];
+            }else{
+                
+                $result = [
+                    'message' => "deleted Student issss successfully",
+                    'data' => $student
+                ];
+            };
+            
+            return response()->json($result,200);
+            
+        } catch (\Throwable $th) {
+            return response()->json(["message"=>"error","error"=>$th],500);
+        }
 
-        $data = [
-            'message' => "deleted Student issss successfully",
-            'data' => $student
-        ];
-
-        return response()->json($data,200);
     }
 }
