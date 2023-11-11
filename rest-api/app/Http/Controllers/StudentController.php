@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Student;
 use Illuminate\Http\Request;
+use Validator;
 class StudentController extends Controller
 {
     /**
@@ -11,15 +12,72 @@ class StudentController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         try {
-            $students = Student::all();
-    
+
+            // untuk filter menggunakan 
+            // filter[nama]
+            // filter[sort]
+            // filter[order]
+
+            // untuk paging menggunakan
+            // page[limit]
+            // page[number]
+            
+            foreach ($request->all() as $key => $value) {
+                $$key = $value;
+            }
+
+            $order = (isset($filter['order'])) ? $filter['order'] : NULL;
+            if ($order == NULL) {
+                $order = 'asc';
+            }
+            $sort = (isset($filter['sort'])) ? $filter['sort'] : NULL;
+            if ($sort == NULL) {
+                $sort = 'nama';
+            }
+            $pageLimit = (isset($page['limit'])) ? $page['limit'] : 5;
+            $pageNumber = (isset($page['number'])) ? $page['number'] : 1;
+            $offset = ($pageNumber - 1) * $pageLimit;
+            $pages = [];
+            $pages['pageLimit'] = (int) $pageLimit;
+            $pages['pageNumber'] = (int) $pageNumber;
+
+            $students = Student::query();
+            $name = (isset($filter['nama'])) ? $filter['nama'] : NULL;
+            if ($name != NULL) {
+                $students = $students->where('nama',$name);
+            }
+
+            $students = $students->orderBy($sort,$order)->offset($offset)
+                        ->limit($pageLimit)->get();
+
+            // get total
+            $studentTotal = Student::query();
+            $name = (isset($filter['nama'])) ? $filter['nama'] : NULL;
+            if ($name != NULL) {
+                $studentTotal = $studentTotal->where('nama',$name);
+            }
+
+            $pageLimit = (isset($page['limit'])) ? $page['limit'] : 5;
+            $pageNumber = (isset($page['number'])) ? $page['number'] : 1;
+            $offset = ($pageNumber - 1) * $pageLimit;
+            
+            $studentTotal = $studentTotal->count();;
+            
+            $pages['totalData'] = $studentTotal;
+            $totalPage = ceil($studentTotal / $pageLimit);
+            $pages['totalPage'] = $totalPage;
+            
+            $data = [];
+            $data['pages'] = $pages;
+            $data['table'] = $students;
+            
             if (count($students) > 0) {
                 $result = [
-                    "message" => "Get All Users",
-                    "data" => $students
+                    "message" => "Success Get All Users",
+                    "data" => $data
                 ];
             }else{
                 $result = [
@@ -30,7 +88,7 @@ class StudentController extends Controller
             return response()->json($result,200);
             
         } catch (\Throwable $th) {
-           return response()->json(["message"=>"error","error"=>$th],500);
+           return response()->json(["message"=>"error"],500);
         }
         
     }
@@ -54,6 +112,20 @@ class StudentController extends Controller
     public function store(Request $request)
     {
         try {
+            $validator = Validator::make($request->all(),[
+                'nama' => "required|max:200",
+                'nim' => "numeric|required",
+                'email' => "email|required",
+                'jurusan' => "required"
+            ]);
+
+            if($validator->fails()){
+                // var_dump($validator->fails());
+                foreach ($validator->errors()->messages() as $key => $value) {
+                    return response()->json(["message"=>"failed Added Data","error"=>$value[0]]);       
+                }
+            }
+
             $input = [
                 'nama' => $request->nama,
                 'nim' => $request->nim,
@@ -68,7 +140,7 @@ class StudentController extends Controller
                 'data' => $students
             ];
     
-            return response()->json($data,2001);
+            return response()->json($data,201);
         } catch (\Throwable $th) {
             return response()->json(["message"=>"error",'error'=>$th],500);
         }
