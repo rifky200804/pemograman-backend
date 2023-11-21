@@ -112,7 +112,12 @@
                     "200": {
                         "description": "Successfully logged out and token deleted"
                     }
-                }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
             }
         },
         "/api/patients": {

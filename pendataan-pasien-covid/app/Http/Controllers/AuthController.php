@@ -133,6 +133,9 @@ class AuthController extends Controller
      *     tags={"auth"},
      *     summary="Logout Auth",
      *     description="Logout and revoke access token",
+     *     security={
+     *      {"sanctum": {}}
+     *     },
      *     operationId="logout",
      *     @OA\Response(
      *         response=200,

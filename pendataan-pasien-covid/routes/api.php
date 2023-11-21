@@ -35,10 +35,5 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
         Route::delete('/{id}',[PatientController::class,'destroy'])->name('destroy');
     });
 
-    
     Route::post('logout',[AuthController::class,'logout'])->name('logout');
 });
-
-Route::get('/test',function(){
-    return response()->json(["success auth"]);
-})->middleware('auth:sanctum');
