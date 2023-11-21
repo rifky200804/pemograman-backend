@@ -48,7 +48,7 @@ class PatientController extends Controller
      *         name="filter[sort]",
      *         in="query",
      *         description="Sort the result by a specific field",
-     *         @OA\Schema(type="string")
+     *         @OA\Schema(type="string", enum={"tanggal_masuk", "tanggal_keluar","address"})
      *     ),
      *     @OA\Parameter(
      *         name="filter[order]",
