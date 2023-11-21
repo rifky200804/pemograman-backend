@@ -86,6 +86,18 @@ class PatientController extends Controller
     public function index(Request $request)
     {
         try {
+            $validator = Validator::make($request->all(), [
+                'filter.status' => 'nullable|in:positif,negatif,meninggal'
+            ],[
+                'filter.status.in' => 'The status field must be one of: positif, negatif, meninggal.'
+            ]);
+
+            if($validator->fails()){
+                // var_dump($validator->fails());
+                foreach ($validator->errors()->messages() as $key => $value) {
+                    return response()->json(["message"=>"failed Get Data","error"=>$value[0]],400);       
+                }
+            }
 
             // untuk filter menggunakan 
             // filter[nama]
@@ -241,6 +253,8 @@ class PatientController extends Controller
                 'status' => "required|in:positif,negatif,meninggal",
                 'in_date_at'=> "nullable|date",
                 'out_date_at'=> "nullable|date",
+            ],[
+                'status.in' => 'The status field must be one of: positif, negatif, meninggal.'
             ]);
 
             if($validator->fails()){
@@ -424,7 +438,9 @@ class PatientController extends Controller
             $validator = Validator::make($request->all(), [
                 'name' => 'max:200',
                 'phone' => 'min:10',
-                'status' => 'in:positif,negatif,meninggal'
+                'status' => 'nullable|in:positif,negatif,meninggal'
+            ],[
+                'status.in' => 'The status field must be one of: positif, negatif, meninggal.'
             ]);
 
             if($validator->fails()){
