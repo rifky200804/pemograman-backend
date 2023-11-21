@@ -6,7 +6,7 @@ use App\Models\Patient;
 use App\Models\StatusPatient;
 use Illuminate\Http\Request;
 use Validator;
-
+use Exception;
 
 class PatientController extends Controller
 {
@@ -87,9 +87,13 @@ class PatientController extends Controller
     {
         try {
             $validator = Validator::make($request->all(), [
-                'filter.status' => 'nullable|in:positif,negatif,meninggal'
+                'filter.status' => 'nullable|in:positif,negatif,meninggal',
+                'filter.sort' => 'nullable|in:tanggal_masuk,tanggal_keluar,address',
+                'filter.order' => 'nullable|in:asc,desc'
             ],[
-                'filter.status.in' => 'The status field must be one of: positif, negatif, meninggal.'
+                'filter.status.in' => 'The status field must be one of: positif, negatif, meninggal',
+                'filter.sort.in' => 'The sort field must be one of: tangal_masuk,tanggal_keluar,address',
+                'filter.order.in' => 'The sort field must be one of: asc,desc'
             ]);
 
             if($validator->fails()){
@@ -116,10 +120,44 @@ class PatientController extends Controller
             if ($order == NULL) {
                 $order = 'asc';
             }
+            switch ($order) {
+                case 'asc':
+                    $order = 'asc';
+                    break;
+                case 'desc':
+                    $order = 'desc';
+                    break;
+                default:
+                    throw new \Exception("The order field must be one of: asc,desc", 400);
+                    break;
+            }
+
             $sort = (isset($filter['sort'])) ? $filter['sort'] : NULL;
             if ($sort == NULL) {
-                $sort = 'in_date_at';
+                $sort = 'tanggal_masuk';
             }
+
+            $validSortFields = ['tanggal_masuk', 'tanggal_keluar', 'address'];
+
+            if (!in_array($sort, $validSortFields)) {
+                throw new \Exception("The sort field must be one of: " . implode(',', $validSortFields), 400);
+            }
+
+            switch ($sort) {
+                case 'tanggal_masuk':
+                    $sort = 'in_date_at';
+                    break;
+                case 'tanggal_keluar':
+                    $sort = 'out_date_at';
+                    break;
+                case 'address':
+                    $sort = 'address';
+                    break;
+                default:
+                    throw new \Exception("The sort field must be one of: tanggal_masuk,tanggal_keluar,address", 400);
+                    break;
+            }
+
 
             $pageLimit = (isset($page['limit'])) ? $page['limit'] : 5;
             $pageNumber = (isset($page['number'])) ? $page['number'] : 1;
@@ -190,8 +228,8 @@ class PatientController extends Controller
     
             return response()->json($result,200);
             
-        } catch (\Throwable $th) {
-           return response()->json(["message"=>"error","error"=>$th],500);
+        } catch (\Exception $e) {
+           return response()->json(["message"=>"error","error"=>$e->getMessage()],500);
         }
     }
 
@@ -362,8 +400,8 @@ class PatientController extends Controller
                 'data'=>$findDataPatient
             ];
             return response()->json($data,200);
-        } catch (\Throwable $th) {
-            return response()->json(["message"=>"error","error"=>$th],500);
+        } catch (\Exception $e) {
+            return response()->json(["message"=>"error","error"=>$e->getMessage()],500);
         }
     }
 
@@ -493,8 +531,8 @@ class PatientController extends Controller
             ];
     
             return response()->json($data,201);
-        } catch (\Throwable $th) {
-            return response()->json(["message"=>"error","error"=>$th],500);
+        } catch (\Exception $e) {
+            return response()->json(["message"=>"error","error"=>$e->getMessage()],500);
         }
     }
 
@@ -554,8 +592,8 @@ class PatientController extends Controller
             ];
     
             return response()->json($data,200);
-        } catch (\Throwable $th) {
-            return response()->json(["message"=>"error","error"=>$th],500);
+        } catch (\Exception $e) {
+            return response()->json(["message"=>"error","error"=>$e->getMessage()],500);
         }
     }
 }
