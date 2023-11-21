@@ -118,7 +118,7 @@ class PatientController extends Controller
 
             $order = (isset($filter['order'])) ? $filter['order'] : NULL;
             if ($order == NULL) {
-                $order = 'asc';
+                $order = 'desc';
             }
             switch ($order) {
                 case 'asc':
