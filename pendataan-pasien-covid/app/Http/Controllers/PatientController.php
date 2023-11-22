@@ -87,7 +87,7 @@ class PatientController extends Controller
     {
         try {
             $validator = Validator::make($request->all(), [
-                'filter.status' => 'nullable|in:positif,negatif,meninggal',
+                'filter.status' => 'nullable|in:positif,sembuh,meninggal',
                 'filter.sort' => 'nullable|in:tanggal_masuk,tanggal_keluar,address',
                 'filter.order' => 'nullable|in:asc,desc'
             ],[
@@ -266,7 +266,7 @@ class PatientController extends Controller
      *              @OA\Property(property="name", type="string", example="John Doe"),
      *              @OA\Property(property="phone", type="string", example="123456789"),
      *              @OA\Property(property="address", type="string", example="123 Main St"),
-     *              @OA\Property(property="status", type="string", example="positif/negatif/meninggal"),
+     *              @OA\Property(property="status", type="string", example="positif/sembuh/meninggal"),
      *              @OA\Property(property="in_date_at", type="string", format="date", example="2023-01-01"),
      *              @OA\Property(property="out_date_at", type="string", format="date", example="2023-01-02"),
      *          )
@@ -288,7 +288,7 @@ class PatientController extends Controller
                 'name' => "required|max:200",
                 'phone' => "required|min:10",
                 'address' => "required",
-                'status' => "required|in:positif,negatif,meninggal",
+                'status' => "required|in:positif,sembuh,meninggal",
                 'in_date_at'=> "nullable|date",
                 'out_date_at'=> "nullable|date",
             ],[
@@ -450,7 +450,7 @@ class PatientController extends Controller
      *              @OA\Property(property="name", type="string", example="John Doe"),
      *              @OA\Property(property="phone", type="string", example="123456789"),
      *              @OA\Property(property="address", type="string", example="123 Main St"),
-     *              @OA\Property(property="status", type="string", example="positif/negatif/meninggal"),
+     *              @OA\Property(property="status", type="string", example="positif/sembuh/meninggal"),
      *              @OA\Property(property="in_date_at", type="string", format="date", example="2023-01-01"),
      *              @OA\Property(property="out_date_at", type="string", format="date", example="2023-01-02"),
      *          )
@@ -476,7 +476,7 @@ class PatientController extends Controller
             $validator = Validator::make($request->all(), [
                 'name' => 'max:200',
                 'phone' => 'min:10',
-                'status' => 'nullable|in:positif,negatif,meninggal'
+                'status' => 'nullable|in:positif,sembuh,meninggal'
             ],[
                 'status.in' => 'The status field must be one of: positif, negatif, meninggal.'
             ]);
