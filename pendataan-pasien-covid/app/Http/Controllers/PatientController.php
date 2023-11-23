@@ -292,7 +292,7 @@ class PatientController extends Controller
                 'in_date_at'=> "nullable|date",
                 'out_date_at'=> "nullable|date",
             ],[
-                'status.in' => 'The status field must be one of: positif, negatif, meninggal.'
+                'status.in' => 'The status field must be one of: positif, sembuh, meninggal.'
             ]);
 
             if($validator->fails()){
@@ -478,7 +478,7 @@ class PatientController extends Controller
                 'phone' => 'min:10',
                 'status' => 'nullable|in:positif,sembuh,meninggal'
             ],[
-                'status.in' => 'The status field must be one of: positif, negatif, meninggal.'
+                'status.in' => 'The status field must be one of: positif, sembuh, meninggal.'
             ]);
 
             if($validator->fails()){
