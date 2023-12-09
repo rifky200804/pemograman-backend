@@ -1,26 +1,26 @@
 let fruits = require('../models/data.js')
 
-let fruitController = {}
+// let fruitController = {}
 
-fruitController.index = () => {
+const index = () => {
     for (const fruit of fruits) {
         console.log(fruit)
     }
 }
 
-fruitController.store = (data) => {
+const store = (data) => {
     fruits.push(data)
-    fruitController.index();
+    index();
 }
 
-fruitController.update = (index,data) => {
-    fruits[index] = data
-    fruitController.index();
+const update = (position,data) => {
+    fruits[position] = data
+    index();
 }
 
-fruitController.destroy = (index) => {
-    fruits.splice(index,1)
-    fruitController.index();
+const destroy = (position) => {
+    fruits.splice(position,1)
+    index();
 }
 
-module.exports = fruitController
+module.exports = {index,store,update,destroy}

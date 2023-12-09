@@ -1,3 +1,3 @@
-let fruits = ["Jeruk","Apel","Durian"]
+var fruits = ["Jeruk","Apel","Durian"]
 
 module.exports = fruits
