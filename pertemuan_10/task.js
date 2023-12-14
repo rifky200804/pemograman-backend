@@ -1,33 +1,26 @@
-
-
-const successDownload = () => {
-    
-    setTimeout(() => {
-        return "Success Download ..."
-    }, 3000);
-}
-
 const showDownloadResult = (result) => {
-    return "Result Download : " + result
+    console.log("Success Download")
+    console.log(`Dwnload Result : ${result}`)
 }
 const processcingDownload =  (result) => {
     return new Promise((resolve) => {
         setTimeout(() => {
             resolve("Download Processing ...")
-        }, 3000);
-
-    console.log(successDownload())
-    console.log(showDownloadResult(result))
+        }, 1000);
     })
 }
 
-const download = async (result) => {
-    console.log(await download(processcingDownload(result)))
+const download = () => {
+    return new Promise((resolve) => {
+        setTimeout(() => {
+        const result = "windows-10.exe";
+        resolve(result);
+        }, 3000);
+    }) 
 }
-
-const main = () => {
-    let data = "windowns-10.exe"
-    download(data)
+const main = async () => {
+    console.log(await processcingDownload())
+    showDownloadResult(await download())
 }
 
 main()
