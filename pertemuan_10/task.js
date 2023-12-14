@@ -18,6 +18,7 @@ const download = () => {
         }, 3000);
     }) 
 }
+// run
 const main = async () => {
     console.log(await processcingDownload())
     showDownloadResult(await download())
