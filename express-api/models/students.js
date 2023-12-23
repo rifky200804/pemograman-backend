@@ -5,4 +5,4 @@ const data = [
     {"id":4, "name":"Pean"}
 ]
 
-module.exports = data
+export default data

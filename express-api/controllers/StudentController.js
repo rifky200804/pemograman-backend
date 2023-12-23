@@ -1,6 +1,7 @@
-let models = require('../models/students')
-class StudentController{
-    index(req,res){
+import models from '../models/students.js'
+
+let controllers = {}
+controllers.index = (req,res) => {
         // res.send("Menampilkan semua Students")
         let response = {
             "message" : "Get All Students",
@@ -10,7 +11,7 @@ class StudentController{
         res.json(response)
     }
 
-    store(req,res){
+controllers.store = (req,res) => {
         try {
             
             let { name } = req.body
@@ -29,7 +30,7 @@ class StudentController{
         }
     }
 
-    update(req,res){
+controllers.update = (req,res) => {
         try {
             const { id } = req.params
             let { name } = req.body
@@ -50,7 +51,7 @@ class StudentController{
         }
     }
 
-    destroy(req,res){
+controllers.destroy = (req,res) =>{
         try {
             const { id } = req.params
             for (let index = 0; index < models.length; index++) {
@@ -67,8 +68,5 @@ class StudentController{
             res.json({"error":"Failed To Deleted Data"})
         }
     }
-}
 
-const controllers = new StudentController()
-
-module.exports = controllers
+export default controllers;
