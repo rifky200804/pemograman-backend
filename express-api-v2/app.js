@@ -10,7 +10,7 @@ dotenv.config();
 
 app.use(routes)
 
-const port = process.env.APP_PORT
+const port = process.env.APP_PORT || 3000
 app.listen(port,()=>{
     console.log("Server Berjalan di http://localhost:"+port)
 })
