@@ -28,6 +28,17 @@ StudentController.store = async (req,res) => {
             return res.status(400).json({ error: "All fields are required" });
         }
 
+        const checkNimStudent = await Student.findOne({
+            where:{
+                nim : nim
+            }
+        })
+
+        console.log(checkNimStudent)
+        if(checkNimStudent != null){
+            return res.status(400).json({error : "Nim is available"})
+        }
+
         const newStudent = await Student.create({
             nama : nama,
             nim : nim,
@@ -54,14 +65,11 @@ StudentController.update = async (req,res) => {
         if (!nama && !nim && !email && !jurusan) {
             return res.status(400).json({ error: "At least one field is required for update" });
         }
+        
 
-        const studentToUpdate = await Student.findOne({
-            where: {
-                id: id,
-            }
-        });
+        const studentToUpdate = await Student.findByPk(id);
 
-        if (!studentToUpdate) {
+        if (studentToUpdate == null) {
             return res.status(404).json({ error: "Student not found" });
         }
 
@@ -90,13 +98,9 @@ StudentController.delete = async (req,res) => {
     try {
         const { id } = req.params;
         
-        const studentToDelete = await Student.findOne({
-            where: {
-                id: id,
-            }
-        });
+        const studentToDelete = await Student.findByPk(id);
 
-        if (!studentToDelete) {
+        if (studentToUpdate == null) {
             return res.status(404).json({ error: "Student not found" });
         }
 
