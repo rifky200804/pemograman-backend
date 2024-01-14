@@ -8,7 +8,7 @@ class StudentController {
         try {
             let filter = {}
             let where = {}
-            // menggunakan filter[nama],filter[jurusan]
+            // untuk filter menggunakan filter[nama],filter[jurusan]
             console.log(req.query.filter)
             if(req.query.filter != undefined){
 
@@ -32,7 +32,7 @@ class StudentController {
             let order
             let sortBy = "id"
             let orderBy = "ASC"
-            
+            // untuk sorting menggunakan sort dan order
             if(req.query.sort != undefined && req.query.sort != ''){
                 let filterSort = req.query.sort.toLowerCase()
                 if (!['name', 'jurusan', 'id'].includes(filterSort)) {
@@ -74,7 +74,7 @@ class StudentController {
         try {
             await Promise.all(Validation.createValidation.map((validation) => validation.run(req)));
             const errors = validationResult(req);
-            
+
             if (!errors.isEmpty()) {
                 const formattedErrors = errors.array().map((error) => ({
                   [error.path]: error.msg
