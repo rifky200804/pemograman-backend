@@ -17,9 +17,10 @@ class StudentController extends Controller
         try {
 
             // untuk filter menggunakan 
-            // filter[nama]
-            // filter[sort]
-            // filter[order]
+            // nama
+            // jurusan
+            // sort
+            // order
 
             // untuk paging menggunakan
             // page[limit]
@@ -29,11 +30,11 @@ class StudentController extends Controller
                 $$key = $value;
             }
 
-            $order = (isset($filter['order'])) ? $filter['order'] : NULL;
+            $order = (isset($order)) ? $order : NULL;
             if ($order == NULL) {
                 $order = 'asc';
             }
-            $sort = (isset($filter['sort'])) ? $filter['sort'] : NULL;
+            $sort = (isset($sort)) ? $sort : NULL;
             if ($sort == NULL) {
                 $sort = 'nama';
             }
@@ -45,13 +46,13 @@ class StudentController extends Controller
             $pages['pageNumber'] = (int) $pageNumber;
 
             $students = Student::query();
-            $name = (isset($filter['nama'])) ? $filter['nama'] : NULL;
+            $name = (isset($nama)) ? $nama : NULL;
             if ($name != NULL) {
                 $students = $students->where('nama',$name);
             }
 
-            $jurusan = (isset($filter['jurusan'])) ? $filter['jurusan'] : NULL;
-            $jurusan = (isset($filter['major'])) ? $filter['major'] : $jurusan;
+            $jurusan = (isset($jurusan)) ? $jurusan : NULL;
+            $jurusan = (isset($major)) ? $major : $jurusan;
             if ($jurusan != NULL) {
                 $students = $students->where('jurusan',$jurusan);
             }
