@@ -50,6 +50,12 @@ class StudentController extends Controller
                 $students = $students->where('nama',$name);
             }
 
+            $jurusan = (isset($filter['jurusan'])) ? $filter['jurusan'] : NULL;
+            $jurusan = (isset($filter['major'])) ? $filter['major'] : $jurusan;
+            if ($jurusan != NULL) {
+                $students = $students->where('jurusan',$jurusan);
+            }
+
             $students = $students->orderBy($sort,$order)->offset($offset)
                         ->limit($pageLimit)->get();
 
